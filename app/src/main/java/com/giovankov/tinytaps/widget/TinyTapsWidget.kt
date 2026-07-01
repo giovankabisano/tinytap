@@ -33,7 +33,7 @@ import com.giovankov.tinytaps.util.TimeFormatter
 class TinyTapsWidget : GlanceAppWidget() {
 
     override suspend fun provideGlance(context: Context, id: GlanceId) {
-        val state = context.getWidgetState()
+        val state = context.applicationContext.getWidgetState()
 
         provideContent {
             WidgetContent(state = state)
@@ -76,24 +76,23 @@ class TinyTapsWidget : GlanceAppWidget() {
             Spacer(modifier = GlanceModifier.height(8.dp))
 
             if (state.isRecording) {
-                // Recording state
+                // Recording state — no live timer, just show start time
                 Text(
                     text = "Sedang merekam gerakan...",
                     style = TextStyle(
                         color = darkTextProvider,
-                        fontSize = 13.sp
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 16.sp
                     )
                 )
 
                 Spacer(modifier = GlanceModifier.height(4.dp))
 
-                val elapsed = System.currentTimeMillis() - state.recordingStartTime
                 Text(
-                    text = TimeFormatter.formatTimer(elapsed),
+                    text = "Mulai pukul ${TimeFormatter.formatTime(state.recordingStartTime)}",
                     style = TextStyle(
-                        color = coralProvider,
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 28.sp
+                        color = lightTextProvider,
+                        fontSize = 13.sp
                     )
                 )
 

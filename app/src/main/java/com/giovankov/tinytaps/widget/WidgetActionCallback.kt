@@ -3,6 +3,7 @@ package com.giovankov.tinytaps.widget
 import android.content.Context
 import androidx.glance.GlanceId
 import androidx.glance.action.ActionParameters
+import androidx.glance.appwidget.GlanceAppWidgetManager
 import androidx.glance.appwidget.action.ActionCallback
 import com.giovankov.tinytaps.data.local.db.TinyTapsDatabase
 import com.giovankov.tinytaps.data.local.db.entity.MovementEpisodeEntity
@@ -15,33 +16,31 @@ class WidgetStartRecordingCallback : ActionCallback {
         glanceId: GlanceId,
         parameters: ActionParameters
     ) {
-        val db = getDatabase(context)
+        val appContext = context.applicationContext
+        val db = getDatabase(appContext)
         val dao = db.movementEpisodeDao()
 
-        // Check if already recording
         val active = dao.getActiveEpisodeOnce()
         if (active != null) return
 
         val now = System.currentTimeMillis()
         val id = UUID.randomUUID().toString()
 
-        val entity = MovementEpisodeEntity(
-            id = id,
-            startAt = now,
-            source = "WIDGET"
+        dao.insert(
+            MovementEpisodeEntity(
+                id = id,
+                startAt = now,
+                source = "WIDGET"
+            )
         )
-        dao.insert(entity)
 
-        // Update widget state
-        context.updateWidgetState(
+        appContext.updateWidgetState(
             isRecording = true,
             activeEpisodeId = id,
             recordingStartTime = now
         )
 
-        // Update widget display + start foreground service for second-precise timer
-        TinyTapsWidget().update(context, glanceId)
-        WidgetTimerService.start(context)
+        updateAllWidgets(appContext)
     }
 }
 
@@ -51,25 +50,30 @@ class WidgetStopRecordingCallback : ActionCallback {
         glanceId: GlanceId,
         parameters: ActionParameters
     ) {
-        val db = getDatabase(context)
+        val appContext = context.applicationContext
+        val db = getDatabase(appContext)
         val dao = db.movementEpisodeDao()
 
         val active = dao.getActiveEpisodeOnce() ?: return
         val now = System.currentTimeMillis()
         val durationSec = ((now - active.startAt) / 1000).toInt()
 
-        val updated = active.copy(endAt = now, durationSec = durationSec)
-        dao.update(updated)
+        dao.update(active.copy(endAt = now, durationSec = durationSec))
 
-        // Update widget state
-        context.updateWidgetState(
+        appContext.updateWidgetState(
             clearRecording = true,
             lastMovementTime = now
         )
 
-        // Update widget display + stop foreground service
-        TinyTapsWidget().update(context, glanceId)
-        WidgetTimerService.stop(context)
+        updateAllWidgets(appContext)
+    }
+}
+
+private suspend fun updateAllWidgets(context: Context) {
+    val manager = GlanceAppWidgetManager(context)
+    val glanceIds = manager.getGlanceIds(TinyTapsWidget::class.java)
+    glanceIds.forEach { id ->
+        TinyTapsWidget().update(context, id)
     }
 }
 
