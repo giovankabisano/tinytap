@@ -7,10 +7,13 @@ import android.app.PendingIntent
 import android.app.Service
 import android.content.Context
 import android.content.Intent
+import android.content.pm.ServiceInfo
+import android.os.Build
 import android.os.Handler
 import android.os.IBinder
 import android.os.Looper
 import androidx.core.app.NotificationCompat
+import androidx.core.app.ServiceCompat
 import androidx.glance.appwidget.GlanceAppWidgetManager
 import com.giovankov.tinytaps.MainActivity
 import com.giovankov.tinytaps.R
@@ -22,10 +25,14 @@ class WidgetTimerService : Service() {
     private val updateRunnable = object : Runnable {
         override fun run() {
             runBlocking {
-                val manager = GlanceAppWidgetManager(this@WidgetTimerService)
-                val glanceIds = manager.getGlanceIds(TinyTapsWidget::class.java)
-                glanceIds.forEach { id ->
-                    TinyTapsWidget().update(this@WidgetTimerService, id)
+                try {
+                    val manager = GlanceAppWidgetManager(this@WidgetTimerService)
+                    val glanceIds = manager.getGlanceIds(TinyTapsWidget::class.java)
+                    glanceIds.forEach { id ->
+                        TinyTapsWidget().update(this@WidgetTimerService, id)
+                    }
+                } catch (_: Exception) {
+                    // Widget may have been removed
                 }
             }
             handler.postDelayed(this, 1000)
@@ -38,7 +45,16 @@ class WidgetTimerService : Service() {
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        startForeground(NOTIFICATION_ID, buildNotification())
+        ServiceCompat.startForeground(
+            this,
+            NOTIFICATION_ID,
+            buildNotification(),
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+                ServiceInfo.FOREGROUND_SERVICE_TYPE_SPECIAL_USE
+            } else {
+                0
+            }
+        )
         handler.post(updateRunnable)
         return START_STICKY
     }
@@ -54,8 +70,9 @@ class WidgetTimerService : Service() {
         val channel = NotificationChannel(
             CHANNEL_ID,
             "Pencatatan Gerakan",
-            NotificationManager.IMPORTANCE_LOW
+            NotificationManager.IMPORTANCE_DEFAULT
         ).apply {
+            description = "Notifikasi saat merekam gerakan bayi"
             setShowBadge(false)
         }
         val manager = getSystemService(NotificationManager::class.java)
@@ -63,7 +80,9 @@ class WidgetTimerService : Service() {
     }
 
     private fun buildNotification(): Notification {
-        val tapIntent = Intent(this, MainActivity::class.java)
+        val tapIntent = Intent(this, MainActivity::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_SINGLE_TOP
+        }
         val pendingIntent = PendingIntent.getActivity(
             this, 0, tapIntent,
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
@@ -75,6 +94,7 @@ class WidgetTimerService : Service() {
             .setContentText("Sedang merekam gerakan bayi...")
             .setOngoing(true)
             .setSilent(true)
+            .setForegroundServiceBehavior(NotificationCompat.FOREGROUND_SERVICE_IMMEDIATE)
             .setContentIntent(pendingIntent)
             .build()
     }
