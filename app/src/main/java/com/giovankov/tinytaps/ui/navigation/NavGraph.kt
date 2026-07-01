@@ -1,9 +1,14 @@
 package com.giovankov.tinytaps.ui.navigation
 
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -55,20 +60,36 @@ fun TinyTapsNavHost() {
         ) {
             composable<OnboardingRoute> {
                 val viewModel: OnboardingViewModel = hiltViewModel()
-                val shouldSkip by viewModel.shouldSkipOnboarding.collectAsStateWithLifecycle()
-                if (shouldSkip) {
-                    navController.navigate(HomeRoute) {
-                        popUpTo(OnboardingRoute) { inclusive = true }
+                val onboardingState by viewModel.onboardingState.collectAsStateWithLifecycle(
+                    initialValue = OnboardingViewModel.State.LOADING
+                )
+
+                when (onboardingState) {
+                    OnboardingViewModel.State.LOADING -> {
+                        Box(
+                            modifier = Modifier.fillMaxSize(),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            CircularProgressIndicator()
+                        }
                     }
-                } else {
-                    OnboardingScreen(
-                        onComplete = {
-                            viewModel.completeOnboarding()
+                    OnboardingViewModel.State.SKIP -> {
+                        LaunchedEffect(Unit) {
                             navController.navigate(HomeRoute) {
                                 popUpTo(OnboardingRoute) { inclusive = true }
                             }
                         }
-                    )
+                    }
+                    OnboardingViewModel.State.SHOW -> {
+                        OnboardingScreen(
+                            onComplete = {
+                                viewModel.completeOnboarding()
+                                navController.navigate(HomeRoute) {
+                                    popUpTo(OnboardingRoute) { inclusive = true }
+                                }
+                            }
+                        )
+                    }
                 }
             }
 

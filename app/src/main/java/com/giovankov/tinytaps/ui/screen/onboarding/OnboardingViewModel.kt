@@ -15,9 +15,11 @@ class OnboardingViewModel @Inject constructor(
     private val settingsRepository: SettingsRepository
 ) : ViewModel() {
 
-    val shouldSkipOnboarding = settingsRepository.settings
-        .map { it.onboardingCompleted }
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), false)
+    enum class State { LOADING, SHOW, SKIP }
+
+    val onboardingState = settingsRepository.settings
+        .map { if (it.onboardingCompleted) State.SKIP else State.SHOW }
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), State.LOADING)
 
     fun completeOnboarding() {
         viewModelScope.launch {
