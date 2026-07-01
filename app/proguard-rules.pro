@@ -1,21 +1,46 @@
-# Add project specific ProGuard rules here.
-# You can control the set of applied configuration files using the
-# proguardFiles setting in build.gradle.
-#
-# For more details, see
-#   http://developer.android.com/guide/developing/tools/proguard.html
+# ============================================================
+# Tiny Taps — ProGuard / R8 Rules
+# ============================================================
 
-# If your project uses WebView with JS, uncomment the following
-# and specify the fully qualified class name to the JavaScript interface
-# class:
-#-keepclassmembers class fqcn.of.javascript.interface.for.webview {
-#   public *;
-#}
+# Keep line numbers for crash reports
+-keepattributes SourceFile,LineNumberTable
+-renamesourcefileattribute SourceFile
 
-# Uncomment this to preserve the line number information for
-# debugging stack traces.
-#-keepattributes SourceFile,LineNumberTable
+# ---- Room ----
+-keep class * extends androidx.room.RoomDatabase
+-keep @androidx.room.Entity class *
+-keep @androidx.room.Dao interface *
 
-# If you keep the line number information, uncomment this to
-# hide the original source file name.
-#-renamesourcefileattribute SourceFile
+# ---- Kotlin Serialization ----
+-keepattributes *Annotation*, InnerClasses
+-dontnote kotlinx.serialization.AnnotationsKt
+
+-keepclassmembers @kotlinx.serialization.Serializable class ** {
+    *** Companion;
+}
+-keepclasseswithmembers class ** {
+    kotlinx.serialization.KSerializer serializer(...);
+}
+
+# ---- Navigation (type-safe routes) ----
+-keep @kotlinx.serialization.Serializable class com.giovankov.tinytaps.ui.navigation.** { *; }
+
+# ---- Glance Widget ----
+-keep class com.giovankov.tinytaps.widget.** { *; }
+-keep class * extends androidx.glance.appwidget.GlanceAppWidget
+-keep class * extends androidx.glance.appwidget.GlanceAppWidgetReceiver
+-keep class * extends androidx.glance.appwidget.action.ActionCallback
+
+# ---- WorkManager + Hilt Workers ----
+-keep class * extends androidx.work.CoroutineWorker
+-keep class * extends androidx.work.Worker
+
+# ---- Domain models (used with Room/DataStore) ----
+-keep class com.giovankov.tinytaps.data.local.db.entity.** { *; }
+-keep class com.giovankov.tinytaps.domain.model.** { *; }
+
+# ---- Enums ----
+-keepclassmembers enum * {
+    public static **[] values();
+    public static ** valueOf(java.lang.String);
+}
