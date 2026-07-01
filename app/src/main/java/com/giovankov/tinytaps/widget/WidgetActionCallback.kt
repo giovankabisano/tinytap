@@ -6,6 +6,7 @@ import androidx.glance.action.ActionParameters
 import androidx.glance.appwidget.GlanceAppWidgetManager
 import androidx.glance.appwidget.action.ActionCallback
 import com.giovankov.tinytaps.data.local.db.entity.MovementEpisodeEntity
+import com.giovankov.tinytaps.notification.NotificationHelper
 import java.util.UUID
 
 class WidgetStartRecordingCallback : ActionCallback {
@@ -28,6 +29,7 @@ class WidgetStartRecordingCallback : ActionCallback {
         )
 
         updateAllWidgets(context.applicationContext)
+        NotificationHelper.showRecordingNotification(context.applicationContext)
     }
 }
 
@@ -51,6 +53,7 @@ class WidgetStopRecordingCallback : ActionCallback {
         )
 
         updateAllWidgets(context.applicationContext)
+        NotificationHelper.cancelRecordingNotification(context.applicationContext)
     }
 }
 

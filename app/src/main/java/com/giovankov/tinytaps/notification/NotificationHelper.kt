@@ -11,14 +11,25 @@ import com.giovankov.tinytaps.R
 
 object NotificationHelper {
 
+    const val CHANNEL_RECORDING = "recording"
     const val CHANNEL_INACTIVITY = "inactivity_alert"
     const val CHANNEL_DAILY_REMINDER = "daily_reminder"
 
+    private const val NOTIFICATION_RECORDING_ID = 1000
     private const val NOTIFICATION_INACTIVITY_ID = 1001
     private const val NOTIFICATION_REMINDER_ID = 1002
 
     fun createChannels(context: Context) {
         val manager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+
+        val recordingChannel = NotificationChannel(
+            CHANNEL_RECORDING,
+            "Pencatatan Gerakan",
+            NotificationManager.IMPORTANCE_LOW
+        ).apply {
+            description = "Notifikasi saat merekam gerakan bayi"
+            setShowBadge(false)
+        }
 
         val inactivityChannel = NotificationChannel(
             CHANNEL_INACTIVITY,
@@ -36,7 +47,35 @@ object NotificationHelper {
             description = "Pengingat harian untuk memperhatikan gerakan bayi"
         }
 
-        manager.createNotificationChannels(listOf(inactivityChannel, reminderChannel))
+        manager.createNotificationChannels(listOf(recordingChannel, inactivityChannel, reminderChannel))
+    }
+
+    fun showRecordingNotification(context: Context) {
+        val manager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+
+        val intent = Intent(context, MainActivity::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_SINGLE_TOP
+        }
+        val pendingIntent = PendingIntent.getActivity(
+            context, 0, intent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+
+        val notification = NotificationCompat.Builder(context, CHANNEL_RECORDING)
+            .setSmallIcon(R.mipmap.ic_launcher)
+            .setContentTitle(context.getString(R.string.app_name))
+            .setContentText("Sedang merekam gerakan bayi...")
+            .setOngoing(true)
+            .setSilent(true)
+            .setContentIntent(pendingIntent)
+            .build()
+
+        manager.notify(NOTIFICATION_RECORDING_ID, notification)
+    }
+
+    fun cancelRecordingNotification(context: Context) {
+        val manager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        manager.cancel(NOTIFICATION_RECORDING_ID)
     }
 
     fun showInactivityAlert(context: Context, hours: Int) {
