@@ -39,8 +39,9 @@ class WidgetStartRecordingCallback : ActionCallback {
             recordingStartTime = now
         )
 
-        // Update widget display
+        // Update widget display + start periodic timer refresh
         TinyTapsWidget().update(context, glanceId)
+        WidgetTimerRefreshReceiver.schedule(context)
     }
 }
 
@@ -66,8 +67,9 @@ class WidgetStopRecordingCallback : ActionCallback {
             lastMovementTime = now
         )
 
-        // Update widget display
+        // Update widget display + stop periodic timer refresh
         TinyTapsWidget().update(context, glanceId)
+        WidgetTimerRefreshReceiver.cancel(context)
     }
 }
 
