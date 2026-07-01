@@ -1,0 +1,19 @@
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Tiny Taps app icon">
+  <defs>
+    <linearGradient id="tt-bg" x1="72" y1="40" x2="440" y2="472" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#F0876B"></stop>
+      <stop offset="0.55" stop-color="#E4735A"></stop>
+      <stop offset="1" stop-color="#D25A41"></stop>
+    </linearGradient>
+    <linearGradient id="tt-heart" x1="214" y1="222" x2="298" y2="318" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#FFFFFF"></stop>
+      <stop offset="1" stop-color="#FFF1EA"></stop>
+    </linearGradient>
+  </defs>
+  <rect width="512" height="512" rx="114" fill="url(#tt-bg)"></rect>
+  
+  <circle cx="256" cy="256" r="102" fill="none" stroke="#FFFFFF" stroke-opacity="0.28" stroke-width="12"></circle>
+  <circle cx="256" cy="256" r="150" fill="none" stroke="#FFFFFF" stroke-opacity="0.13" stroke-width="12"></circle>
+  
+  <path d="M256 240 C247 226 230 218 214 226 C196 235 196 262 214 282 C227 296 244 308 256 318 C268 308 285 296 298 282 C316 262 316 235 298 226 C282 218 265 226 256 240 Z" fill="url(#tt-heart)"></path>
+</svg>
