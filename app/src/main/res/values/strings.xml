@@ -1,3 +1,127 @@
 <resources>
-    <string name="app_name">tinytaps</string>
+    <string name="app_name">Tiny Taps</string>
+
+    <!-- Onboarding -->
+    <string name="onboarding_welcome_title">Selamat Datang di Tiny Taps</string>
+    <string name="onboarding_welcome_desc">Catat gerakan bayimu dengan mudah — cukup satu ketukan dari layar utama HP.</string>
+    <string name="onboarding_widget_title">Pasang Widget</string>
+    <string name="onboarding_widget_desc">Tambahkan widget Tiny Taps ke layar utama untuk mencatat gerakan bayi tanpa membuka aplikasi.</string>
+    <string name="onboarding_disclaimer_title">Penting untuk Diketahui</string>
+    <string name="onboarding_disclaimer_text">Tiny Taps adalah alat bantu catat dan pengingat, BUKAN alat medis.\n\nAplikasi ini tidak mendiagnosa, tidak menilai risiko, dan tidak menggantikan pemeriksaan bidan atau dokter.\n\nJika kamu merasa gerakan bayi berkurang atau berbeda dari biasanya, segera hubungi bidan atau rumah sakit — layanan tersedia 24 jam.</string>
+    <string name="onboarding_agree">Saya mengerti</string>
+    <string name="onboarding_start">Mulai</string>
+    <string name="onboarding_next">Lanjut</string>
+
+    <!-- Home -->
+    <string name="home_greeting">Halo, Bunda</string>
+    <string name="home_last_movement">Terakhir bergerak</string>
+    <string name="home_no_record">Belum ada catatan</string>
+    <string name="home_record_movement">Catat Gerakan</string>
+    <string name="home_kick_count">Hitung Tendangan</string>
+    <string name="home_today_summary">Ringkasan hari ini</string>
+    <string name="home_episodes_today">%d episode gerakan</string>
+    <string name="home_kicks_today">%d sesi tendangan</string>
+
+    <!-- Recording -->
+    <string name="recording_title">Catat Gerakan</string>
+    <string name="recording_start">Bayi Mulai Gerak</string>
+    <string name="recording_stop">Bayi Berhenti Gerak</string>
+    <string name="recording_idle_hint">Tekan tombol saat bayi mulai bergerak</string>
+    <string name="recording_started_at">Mulai pukul %s</string>
+    <string name="recording_long_episode_title">Masih bergerak?</string>
+    <string name="recording_long_episode_message">Episode sudah berjalan lebih dari 60 menit.</string>
+    <string name="recording_continue">Lanjut</string>
+    <string name="recording_stop_now">Hentikan Sekarang</string>
+    <string name="recording_discard">Buang</string>
+
+    <!-- Kick Count -->
+    <string name="kick_count_title">Hitung Tendangan</string>
+    <string name="kick_add">+1 Gerakan</string>
+    <string name="kick_finish">Selesai</string>
+    <string name="kick_target_reached_title">Target tercapai!</string>
+    <string name="kick_target_reached_message">%d gerakan dalam %s</string>
+    <string name="kick_trimester_info">Penghitungan tendangan paling relevan di trimester ke-3 (28 minggu ke atas). Pola gerakan di bawah usia kehamilan tersebut belum tentu stabil.</string>
+    <string name="kick_medical_note">Catatan ini hanya untuk informasi. Jika kamu merasa gerakan bayi berkurang atau berbeda dari biasanya, segera hubungi bidan atau rumah sakit — layanan tersedia 24 jam.</string>
+
+    <!-- History -->
+    <string name="history_title">Riwayat</string>
+    <string name="history_empty">Belum ada riwayat gerakan</string>
+    <string name="history_filter_all">Semua</string>
+    <string name="history_filter_episodes">Episode</string>
+    <string name="history_filter_kicks">Tendangan</string>
+
+    <!-- Pattern -->
+    <string name="pattern_title">Pola Gerakan</string>
+    <string name="pattern_heatmap_title">Pola Harian</string>
+    <string name="pattern_trend_title">Tren Harian</string>
+    <string name="pattern_7_days">7 hari</string>
+    <string name="pattern_30_days">30 hari</string>
+    <string name="pattern_no_data">Belum cukup data untuk menampilkan pola</string>
+    <string name="pattern_episodes_label">Episode</string>
+
+    <!-- Settings -->
+    <string name="settings_title">Pengaturan</string>
+    <string name="settings_reminder_section">Pengingat</string>
+    <string name="settings_active_window">Jendela Aktif</string>
+    <string name="settings_active_window_desc">Rentang jam saat pengingat aktif</string>
+    <string name="settings_inactivity_alert">Peringatan Kelambatan</string>
+    <string name="settings_inactivity_alert_desc">Ingatkan jika belum ada gerakan yang dicatat</string>
+    <string name="settings_inactivity_threshold">Ambang peringatan</string>
+    <string name="settings_inactivity_threshold_value">%d jam</string>
+    <string name="settings_daily_reminder">Pengingat Harian</string>
+    <string name="settings_daily_reminder_desc">Pengingat untuk memperhatikan gerakan bayi</string>
+    <string name="settings_kick_section">Tendangan</string>
+    <string name="settings_kick_target">Target tendangan</string>
+    <string name="settings_kick_target_value">%d gerakan</string>
+    <string name="settings_pregnancy_section">Kehamilan</string>
+    <string name="settings_due_date">Hari Perkiraan Lahir (HPL)</string>
+    <string name="settings_due_date_not_set">Belum diatur</string>
+    <string name="settings_emergency_contact">Kontak tenaga medis</string>
+    <string name="settings_emergency_contact_hint">Nomor bidan/RS</string>
+    <string name="settings_appearance_section">Tampilan</string>
+    <string name="settings_theme">Tema</string>
+    <string name="settings_theme_system">Ikuti sistem</string>
+    <string name="settings_theme_light">Terang</string>
+    <string name="settings_theme_dark">Gelap</string>
+    <string name="settings_haptics">Getaran</string>
+    <string name="settings_about_section">Tentang</string>
+    <string name="settings_education">Tentang gerakan bayi</string>
+    <string name="settings_version">Versi %s</string>
+
+    <!-- Education -->
+    <string name="education_title">Tentang Gerakan Bayi</string>
+    <string name="education_when_to_contact">Kapan Harus Menghubungi Tenaga Medis</string>
+    <string name="education_intro">Setiap kehamilan berbeda. Yang terpenting adalah kamu mengenali pola gerakan normal bayimu sendiri dan menyadari jika ada perubahan.</string>
+    <string name="education_movement_info">Bayi biasanya mulai terasa bergerak sekitar usia kehamilan 18–24 minggu. Seiring bertambahnya usia kehamilan, kamu akan makin mengenali pola dan waktu aktif bayimu.</string>
+    <string name="education_kick_count_info">Penghitungan tendangan paling bermakna di trimester ke-3 (sekitar 28 minggu ke atas). Umumnya, bayi bergerak setidaknya 10 kali dalam 2 jam — namun ini bukan patokan mutlak.</string>
+    <string name="education_contact_title">Segera hubungi bidan atau rumah sakit jika:</string>
+    <string name="education_contact_1">Kamu merasa gerakan bayi berkurang atau berbeda dari pola biasanya</string>
+    <string name="education_contact_2">Kamu tidak merasakan gerakan bayi sama sekali</string>
+    <string name="education_contact_3">Kamu memiliki kekhawatiran apa pun tentang kondisi bayimu</string>
+    <string name="education_contact_footer">Jangan menunggu — layanan bidan dan rumah sakit tersedia 24 jam. Kalau ragu, hubungi tenaga medis.</string>
+    <string name="education_call_contact">Hubungi Tenaga Medis</string>
+    <string name="education_no_contact">Belum ada nomor kontak tersimpan. Kamu bisa menambahkannya di Pengaturan.</string>
+    <string name="education_disclaimer">Informasi ini bersifat umum berdasarkan panduan RCOG dan ACOG, disajikan dalam bahasa sederhana. Ini bukan pengganti konsultasi medis.</string>
+
+    <!-- Widget -->
+    <string name="widget_name">Tiny Taps</string>
+    <string name="widget_description">Catat gerakan bayi dengan satu ketukan</string>
+    <string name="widget_last_movement">Terakhir bergerak</string>
+    <string name="widget_start">Bayi mulai gerak</string>
+    <string name="widget_stop">Bayi berhenti gerak</string>
+    <string name="widget_kick_count">Hitung Tendangan</string>
+
+    <!-- Notifications -->
+    <string name="notification_inactivity_title">Pengingat Gerakan Bayi</string>
+    <string name="notification_inactivity_text">Belum ada gerakan yang kamu catat dalam %d jam. Coba luangkan waktu memperhatikan gerakan bayi: berbaring miring ke kiri, minum sesuatu yang manis/dingin, di tempat tenang. Jika gerakan terasa berkurang atau berbeda dari biasanya, segera hubungi bidan atau rumah sakit — layanan tersedia 24 jam.</string>
+    <string name="notification_daily_reminder_title">Tiny Taps</string>
+    <string name="notification_daily_reminder_text">Waktunya memperhatikan gerakan bayi \uD83D\uDC9B</string>
+    <string name="notification_channel_inactivity">Peringatan Kelambatan</string>
+    <string name="notification_channel_reminder">Pengingat Harian</string>
+
+    <!-- General -->
+    <string name="back">Kembali</string>
+    <string name="cancel">Batal</string>
+    <string name="save">Simpan</string>
+    <string name="ok">OK</string>
 </resources>
