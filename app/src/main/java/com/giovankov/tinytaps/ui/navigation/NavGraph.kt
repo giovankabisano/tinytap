@@ -27,17 +27,18 @@ import com.giovankov.tinytaps.ui.screen.recording.RecordingViewModel
 import com.giovankov.tinytaps.ui.screen.settings.SettingsScreen
 import com.giovankov.tinytaps.ui.screen.settings.SettingsViewModel
 
+private val bottomNavRouteNames = bottomNavItems.map {
+    it.route::class.qualifiedName ?: ""
+}
+
 @Composable
 fun TinyTapsNavHost() {
     val navController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
 
-    // Screens that show bottom nav
-    val showBottomBar = currentDestination?.let { dest ->
-        bottomNavItems.any { item ->
-            dest.hierarchy.any { it.hasRoute(item.route::class) }
-        }
+    val showBottomBar = currentDestination?.route?.let { route ->
+        bottomNavRouteNames.any { name -> route.contains(name) }
     } ?: false
 
     Scaffold(
@@ -136,11 +137,5 @@ fun TinyTapsNavHost() {
                 )
             }
         }
-    }
-}
-
-private fun androidx.navigation.NavDestination.hasRoute(route: kotlin.reflect.KClass<*>): Boolean {
-    return this.hierarchy.any { dest ->
-        dest.route?.contains(route.qualifiedName ?: "") == true
     }
 }

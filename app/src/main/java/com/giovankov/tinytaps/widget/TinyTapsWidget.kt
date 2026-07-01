@@ -1,21 +1,19 @@
 package com.giovankov.tinytaps.widget
 
 import android.content.Context
-import android.content.Intent
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.glance.GlanceId
 import androidx.glance.GlanceModifier
-import androidx.glance.GlanceTheme
 import androidx.glance.action.actionStartActivity
 import androidx.glance.action.clickable
 import androidx.glance.appwidget.GlanceAppWidget
 import androidx.glance.appwidget.action.actionRunCallback
 import androidx.glance.appwidget.provideContent
 import androidx.glance.background
-import androidx.glance.currentState
+import androidx.glance.color.ColorProvider
 import androidx.glance.layout.Alignment
 import androidx.glance.layout.Box
 import androidx.glance.layout.Column
@@ -46,13 +44,21 @@ class TinyTapsWidget : GlanceAppWidget() {
     private fun WidgetContent(state: WidgetDisplayState) {
         val coralColor = Color(0xFFE8614D)
         val creamBg = Color(0xFFFFF8F4)
+        val darkBg = Color(0xFF1A1210)
         val darkText = Color(0xFF2D1F1A)
         val lightText = Color(0xFF8A7A72)
+        val lightOnDark = Color(0xFFF5E8E0)
+        val mutedOnDark = Color(0xFF9A8A82)
+
+        val coralProvider = ColorProvider(coralColor, coralColor)
+        val darkTextProvider = ColorProvider(darkText, lightOnDark)
+        val lightTextProvider = ColorProvider(lightText, mutedOnDark)
+        val whiteProvider = ColorProvider(Color.White, Color.White)
 
         Column(
             modifier = GlanceModifier
                 .fillMaxSize()
-                .background(creamBg)
+                .background(ColorProvider(creamBg, darkBg))
                 .padding(16.dp),
             verticalAlignment = Alignment.Top,
             horizontalAlignment = Alignment.Start
@@ -61,7 +67,7 @@ class TinyTapsWidget : GlanceAppWidget() {
             Text(
                 text = "Tiny Taps",
                 style = TextStyle(
-                    color = androidx.glance.color.ColorProvider(coralColor),
+                    color = coralProvider,
                     fontWeight = FontWeight.Bold,
                     fontSize = 14.sp
                 )
@@ -74,7 +80,7 @@ class TinyTapsWidget : GlanceAppWidget() {
                 Text(
                     text = "Sedang merekam gerakan...",
                     style = TextStyle(
-                        color = androidx.glance.color.ColorProvider(darkText),
+                        color = darkTextProvider,
                         fontSize = 13.sp
                     )
                 )
@@ -85,7 +91,7 @@ class TinyTapsWidget : GlanceAppWidget() {
                 Text(
                     text = TimeFormatter.formatTimer(elapsed),
                     style = TextStyle(
-                        color = androidx.glance.color.ColorProvider(coralColor),
+                        color = coralProvider,
                         fontWeight = FontWeight.Bold,
                         fontSize = 28.sp
                     )
@@ -105,7 +111,7 @@ class TinyTapsWidget : GlanceAppWidget() {
                     Text(
                         text = "Bayi berhenti gerak",
                         style = TextStyle(
-                            color = androidx.glance.color.ColorProvider(Color.White),
+                            color = whiteProvider,
                             fontWeight = FontWeight.Medium,
                             fontSize = 14.sp
                         )
@@ -116,7 +122,7 @@ class TinyTapsWidget : GlanceAppWidget() {
                 Text(
                     text = "Terakhir bergerak",
                     style = TextStyle(
-                        color = androidx.glance.color.ColorProvider(lightText),
+                        color = lightTextProvider,
                         fontSize = 12.sp
                     )
                 )
@@ -134,7 +140,7 @@ class TinyTapsWidget : GlanceAppWidget() {
                     Text(
                         text = relativeTime,
                         style = TextStyle(
-                            color = androidx.glance.color.ColorProvider(darkText),
+                            color = darkTextProvider,
                             fontWeight = FontWeight.Bold,
                             fontSize = 18.sp
                         )
@@ -144,7 +150,7 @@ class TinyTapsWidget : GlanceAppWidget() {
                         Text(
                             text = TimeFormatter.formatTime(it),
                             style = TextStyle(
-                                color = androidx.glance.color.ColorProvider(lightText),
+                                color = lightTextProvider,
                                 fontSize = 12.sp
                             )
                         )
@@ -165,7 +171,7 @@ class TinyTapsWidget : GlanceAppWidget() {
                     Text(
                         text = "Bayi mulai gerak",
                         style = TextStyle(
-                            color = androidx.glance.color.ColorProvider(Color.White),
+                            color = whiteProvider,
                             fontWeight = FontWeight.Medium,
                             fontSize = 14.sp
                         )
@@ -182,9 +188,9 @@ class TinyTapsWidget : GlanceAppWidget() {
                     contentAlignment = Alignment.Center
                 ) {
                     Text(
-                        text = "⏱ Hitung Tendangan",
+                        text = "Hitung Tendangan",
                         style = TextStyle(
-                            color = androidx.glance.color.ColorProvider(coralColor),
+                            color = coralProvider,
                             fontSize = 12.sp
                         )
                     )

@@ -15,8 +15,6 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.navigation.NavDestination.Companion.hasRoute
-import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 
@@ -41,9 +39,8 @@ fun TinyTapsBottomNavBar(
 ) {
     NavigationBar {
         bottomNavItems.forEach { item ->
-            val selected = currentDestination?.hierarchy?.any {
-                it.hasRoute(item.route::class)
-            } == true
+            val routeName = item.route::class.qualifiedName ?: ""
+            val selected = currentDestination?.route?.contains(routeName) == true
 
             NavigationBarItem(
                 selected = selected,
