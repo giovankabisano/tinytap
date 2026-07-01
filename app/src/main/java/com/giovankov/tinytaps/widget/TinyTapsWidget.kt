@@ -7,7 +7,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.glance.GlanceId
 import androidx.glance.GlanceModifier
-import androidx.glance.action.actionStartActivity
 import androidx.glance.action.clickable
 import androidx.glance.appwidget.GlanceAppWidget
 import androidx.glance.appwidget.action.actionRunCallback
@@ -19,15 +18,14 @@ import androidx.glance.layout.Box
 import androidx.glance.layout.Column
 import androidx.glance.layout.Row
 import androidx.glance.layout.Spacer
-import androidx.glance.layout.fillMaxSize
 import androidx.glance.layout.fillMaxWidth
+import androidx.glance.layout.fillMaxSize
 import androidx.glance.layout.height
 import androidx.glance.layout.padding
 import androidx.glance.layout.width
 import androidx.glance.text.FontWeight
 import androidx.glance.text.Text
 import androidx.glance.text.TextStyle
-import com.giovankov.tinytaps.MainActivity
 import com.giovankov.tinytaps.util.TimeFormatter
 
 class TinyTapsWidget : GlanceAppWidget() {
@@ -59,141 +57,106 @@ class TinyTapsWidget : GlanceAppWidget() {
             modifier = GlanceModifier
                 .fillMaxSize()
                 .background(ColorProvider(creamBg, darkBg))
-                .padding(16.dp),
-            verticalAlignment = Alignment.Top,
+                .padding(12.dp),
+            verticalAlignment = Alignment.CenterVertically,
             horizontalAlignment = Alignment.Start
         ) {
-            // Header
-            Text(
-                text = "Tiny Taps",
-                style = TextStyle(
-                    color = coralProvider,
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 14.sp
-                )
-            )
-
-            Spacer(modifier = GlanceModifier.height(8.dp))
-
             if (state.isRecording) {
-                // Recording state — no live timer, just show start time
-                Text(
-                    text = "Sedang merekam gerakan...",
-                    style = TextStyle(
-                        color = darkTextProvider,
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 16.sp
-                    )
-                )
-
-                Spacer(modifier = GlanceModifier.height(4.dp))
-
-                Text(
-                    text = "Mulai pukul ${TimeFormatter.formatTime(state.recordingStartTime)}",
-                    style = TextStyle(
-                        color = lightTextProvider,
-                        fontSize = 13.sp
-                    )
-                )
-
-                Spacer(modifier = GlanceModifier.height(12.dp))
-
-                // Stop button
-                Box(
-                    modifier = GlanceModifier
-                        .fillMaxWidth()
-                        .height(44.dp)
-                        .background(coralColor)
-                        .clickable(actionRunCallback<WidgetStopRecordingCallback>()),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text(
-                        text = "Bayi berhenti gerak",
-                        style = TextStyle(
-                            color = whiteProvider,
-                            fontWeight = FontWeight.Medium,
-                            fontSize = 14.sp
-                        )
-                    )
-                }
-            } else {
-                // Idle state
-                Text(
-                    text = "Terakhir bergerak",
-                    style = TextStyle(
-                        color = lightTextProvider,
-                        fontSize = 12.sp
-                    )
-                )
-
-                Spacer(modifier = GlanceModifier.height(2.dp))
-
-                val relativeTime = state.lastMovementTime?.let {
-                    TimeFormatter.formatRelativeTime(it)
-                } ?: "Belum ada catatan"
-
+                // Recording state
                 Row(
                     modifier = GlanceModifier.fillMaxWidth(),
-                    verticalAlignment = Alignment.Bottom
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Text(
-                        text = relativeTime,
-                        style = TextStyle(
-                            color = darkTextProvider,
-                            fontWeight = FontWeight.Bold,
-                            fontSize = 18.sp
-                        )
-                    )
-                    state.lastMovementTime?.let {
-                        Spacer(modifier = GlanceModifier.width(8.dp))
+                    Column(modifier = GlanceModifier.defaultWeight()) {
                         Text(
-                            text = TimeFormatter.formatTime(it),
+                            text = "Sedang merekam...",
+                            style = TextStyle(
+                                color = darkTextProvider,
+                                fontWeight = FontWeight.Bold,
+                                fontSize = 14.sp
+                            )
+                        )
+                        Text(
+                            text = "Mulai ${TimeFormatter.formatTime(state.recordingStartTime)}",
                             style = TextStyle(
                                 color = lightTextProvider,
                                 fontSize = 12.sp
                             )
                         )
                     }
-                }
 
-                Spacer(modifier = GlanceModifier.height(12.dp))
+                    Spacer(modifier = GlanceModifier.width(8.dp))
 
-                // Start button
-                Box(
-                    modifier = GlanceModifier
-                        .fillMaxWidth()
-                        .height(44.dp)
-                        .background(coralColor)
-                        .clickable(actionRunCallback<WidgetStartRecordingCallback>()),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text(
-                        text = "Bayi mulai gerak",
-                        style = TextStyle(
-                            color = whiteProvider,
-                            fontWeight = FontWeight.Medium,
-                            fontSize = 14.sp
+                    Box(
+                        modifier = GlanceModifier
+                            .height(36.dp)
+                            .width(130.dp)
+                            .background(coralColor)
+                            .clickable(actionRunCallback<WidgetStopRecordingCallback>()),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(
+                            text = "Berhenti",
+                            style = TextStyle(
+                                color = whiteProvider,
+                                fontWeight = FontWeight.Medium,
+                                fontSize = 13.sp
+                            )
                         )
-                    )
+                    }
                 }
-
-                Spacer(modifier = GlanceModifier.height(8.dp))
-
-                // Kick count shortcut
-                Box(
-                    modifier = GlanceModifier
-                        .fillMaxWidth()
-                        .clickable(actionStartActivity<MainActivity>()),
-                    contentAlignment = Alignment.Center
+            } else {
+                // Idle state
+                Row(
+                    modifier = GlanceModifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Text(
-                        text = "Hitung Tendangan",
-                        style = TextStyle(
-                            color = coralProvider,
-                            fontSize = 12.sp
+                    Column(modifier = GlanceModifier.defaultWeight()) {
+                        val relativeTime = state.lastMovementTime?.let {
+                            TimeFormatter.formatRelativeTime(it)
+                        } ?: "Belum ada catatan"
+
+                        Text(
+                            text = relativeTime,
+                            style = TextStyle(
+                                color = darkTextProvider,
+                                fontWeight = FontWeight.Bold,
+                                fontSize = 16.sp
+                            )
                         )
-                    )
+                        Text(
+                            text = state.lastMovementTime?.let {
+                                "Terakhir ${TimeFormatter.formatTime(it)}"
+                            } ?: "Tiny Taps",
+                            style = TextStyle(
+                                color = lightTextProvider,
+                                fontSize = 11.sp
+                            )
+                        )
+                    }
+
+                    Spacer(modifier = GlanceModifier.width(8.dp))
+
+                    Box(
+                        modifier = GlanceModifier
+                            .height(36.dp)
+                            .width(130.dp)
+                            .background(coralColor)
+                            .clickable(actionRunCallback<WidgetStartRecordingCallback>()),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(
+                            text = "Mulai gerak",
+                            style = TextStyle(
+                                color = whiteProvider,
+                                fontWeight = FontWeight.Medium,
+                                fontSize = 13.sp
+                            )
+                        )
+                    }
                 }
+
+
             }
         }
     }
