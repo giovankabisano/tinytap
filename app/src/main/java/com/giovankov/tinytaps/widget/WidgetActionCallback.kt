@@ -5,9 +5,7 @@ import androidx.glance.GlanceId
 import androidx.glance.action.ActionParameters
 import androidx.glance.appwidget.GlanceAppWidgetManager
 import androidx.glance.appwidget.action.ActionCallback
-import com.giovankov.tinytaps.data.local.db.TinyTapsDatabase
 import com.giovankov.tinytaps.data.local.db.entity.MovementEpisodeEntity
-import androidx.room.Room
 import java.util.UUID
 
 class WidgetStartRecordingCallback : ActionCallback {
@@ -16,31 +14,20 @@ class WidgetStartRecordingCallback : ActionCallback {
         glanceId: GlanceId,
         parameters: ActionParameters
     ) {
-        val appContext = context.applicationContext
-        val db = getDatabase(appContext)
+        val db = WidgetDatabase.get(context.applicationContext)
         val dao = db.movementEpisodeDao()
 
-        val active = dao.getActiveEpisodeOnce()
-        if (active != null) return
-
-        val now = System.currentTimeMillis()
-        val id = UUID.randomUUID().toString()
+        if (dao.getActiveEpisodeOnce() != null) return
 
         dao.insert(
             MovementEpisodeEntity(
-                id = id,
-                startAt = now,
+                id = UUID.randomUUID().toString(),
+                startAt = System.currentTimeMillis(),
                 source = "WIDGET"
             )
         )
 
-        appContext.updateWidgetState(
-            isRecording = true,
-            activeEpisodeId = id,
-            recordingStartTime = now
-        )
-
-        updateAllWidgets(appContext)
+        updateAllWidgets(context.applicationContext)
     }
 }
 
@@ -50,22 +37,20 @@ class WidgetStopRecordingCallback : ActionCallback {
         glanceId: GlanceId,
         parameters: ActionParameters
     ) {
-        val appContext = context.applicationContext
-        val db = getDatabase(appContext)
+        val db = WidgetDatabase.get(context.applicationContext)
         val dao = db.movementEpisodeDao()
 
         val active = dao.getActiveEpisodeOnce() ?: return
         val now = System.currentTimeMillis()
-        val durationSec = ((now - active.startAt) / 1000).toInt()
 
-        dao.update(active.copy(endAt = now, durationSec = durationSec))
-
-        appContext.updateWidgetState(
-            clearRecording = true,
-            lastMovementTime = now
+        dao.update(
+            active.copy(
+                endAt = now,
+                durationSec = ((now - active.startAt) / 1000).toInt()
+            )
         )
 
-        updateAllWidgets(appContext)
+        updateAllWidgets(context.applicationContext)
     }
 }
 
@@ -75,14 +60,4 @@ private suspend fun updateAllWidgets(context: Context) {
     glanceIds.forEach { id ->
         TinyTapsWidget().update(context, id)
     }
-}
-
-private var cachedDb: TinyTapsDatabase? = null
-
-private fun getDatabase(context: Context): TinyTapsDatabase {
-    return cachedDb ?: Room.databaseBuilder(
-        context.applicationContext,
-        TinyTapsDatabase::class.java,
-        "tinytaps.db"
-    ).build().also { cachedDb = it }
 }

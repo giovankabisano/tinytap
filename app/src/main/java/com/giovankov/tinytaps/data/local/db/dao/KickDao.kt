@@ -21,6 +21,9 @@ interface KickDao {
     @Query("SELECT MAX(at) FROM kicks")
     fun getLastKickTime(): Flow<Long?>
 
+    @Query("SELECT MAX(at) FROM kicks")
+    suspend fun getLastKickTimeOnce(): Long?
+
     @Query("SELECT at FROM kicks WHERE sessionId = :sessionId ORDER BY at ASC")
     fun getKickTimestamps(sessionId: String): Flow<List<Long>>
 

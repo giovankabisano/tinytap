@@ -34,6 +34,9 @@ interface MovementEpisodeDao {
     @Query("SELECT MAX(endAt) FROM movement_episodes WHERE endAt IS NOT NULL")
     fun getLastEpisodeEndTime(): Flow<Long?>
 
+    @Query("SELECT MAX(endAt) FROM movement_episodes WHERE endAt IS NOT NULL")
+    suspend fun getLastEpisodeEndTimeOnce(): Long?
+
     @Query("SELECT COUNT(*) FROM movement_episodes WHERE startAt >= :dayStart")
     fun getEpisodeCountSince(dayStart: Long): Flow<Int>
 
